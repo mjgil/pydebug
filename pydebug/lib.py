@@ -1,10 +1,8 @@
-# import termcolor
 import os
 import re
 import sys
 import time
 from functools import wraps
-# import colorama
 
 
 __all__ = ['debug']
@@ -65,7 +63,7 @@ def printable(f):
         file = kwargs.get('file', sys.stderr)
         flush = kwargs.get('flush', False)
 
-        fmt = sep.join([str(x) for x in args])
+        fmt = sep.join([repr(x) for x in args])
         fmt = f(fmt)
 
         file.write(fmt+end)
