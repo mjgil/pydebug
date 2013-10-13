@@ -23,3 +23,5 @@ debug('should be milliseconds now')
 
 time.sleep(1)
 debug('should be seconds now')
+
+debug(dir([]), repr([]), str([]))
