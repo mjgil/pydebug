@@ -71,7 +71,7 @@ def debug(name):
 
         fmt = """
               \u001b[9{0}m{1} \u001b[3{0}m\u001b[90m
-              {2}\u001b[3{0}m +{4}\u001b[0m
+              {2}\u001b[3{0}m +{3}\u001b[0m
               """.format(c, name, fmt, humanize(us))
 
         sys.stderr.write(fmt)
