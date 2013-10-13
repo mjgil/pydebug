@@ -2,7 +2,7 @@
 import os
 import re
 import sys
-from datetime import datetime
+import time
 # import colorama
 
 
@@ -47,6 +47,10 @@ def noop():
     pass
 
 
+def to_utc_string(input_time):
+    return time.strftime("%a, %d %b %Y %T GMT", time.gmtime(input_time))
+
+
 def debug(name):
     should_skip = any(r.match(name) for r in skips)
 
@@ -58,6 +62,7 @@ def debug(name):
     if not has_match:
         return noop
 
+    c = color()
 
 
     return name
