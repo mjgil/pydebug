@@ -10,7 +10,6 @@ names = []
 skips = []
 sep_regex = "[\s,]+"
 
-print "debug imported"
 debug_names = os.environ.get('DEBUG', '')
 split_names = re.split(sep_regex, debug_names)
 
