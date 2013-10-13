@@ -18,6 +18,16 @@ Example _test.py_:
 import pydebug
 import time
 
+# 
+# pydebug.debug(name)
+#
+# once you have initialized the
+# debug module you can call it
+# as shown below
+#
+# debug(*objects, sep=' ', end='\n', file=sys.stderr, flush=False)
+#
+
 debug = pydebug.debug("test")
 debug("hi there2")
 
