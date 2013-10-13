@@ -1,4 +1,3 @@
-# _*_ coding: utf-8 _*_
 import os
 import re
 import sys
@@ -42,7 +41,7 @@ def humanize(us):
     if us >= min: return "%sm" % round(us/min, 1)
     if us >= sec: return "%ss" % round(us/sec, 1)
     if us >= ms: return "%sms" % round(us/ms, 1)
-    return u"%sμs" % us
+    return "%sus" % us
 
 
 def noop(*args, **kwargs):
@@ -75,12 +74,12 @@ def debug(name):
         colors the output,
         mimicks pythons print() function
         """
-        return u"  \033[9{0}m{1} \033[3{0}m\033[90m{2}\033[3{0}m +{3}\033[0m".format(
+        return "  \033[9{0}m{1} \033[3{0}m\033[90m{2}\033[3{0}m +{3}\033[0m".format(
                c, name, fmt, humanize(us))
 
     def plain(fmt, us):
-        return u"{} {} {} +{}".format(to_utc_string(time.time()),
-                                      name, fmt, humanize(us))
+        return "{} {} {} +{}".format(to_utc_string(time.time()),
+                                     name, fmt, humanize(us))
 
     def printable(*args, **kwargs):
         sep = kwargs.get('sep', ' ')
