@@ -64,5 +64,24 @@ def debug(name):
 
     c = color()
 
+    def colored(fmt):
+        curr = time.time() * 1000000  # microseconds
+        us = curr - prev.get(name, curr)
+        prev[name] = curr
+
+        fmt = """
+              \u001b[9{0}m{1} \u001b[3{0}m\u001b[90m
+              {2}\u001b[3{0}m +{4}\u001b[0m
+              """.format(c, name, fmt, humanize(us))
+
+        sys.stderr.write(fmt)
+
+    def plain(fmt):
+        fmt = "{} {} {}".format(to_utc_string(time.time()),
+                                name, fmt)
+
+        sys.stderr.write(fmt)
+
+    return colored if isatty else plain
 
     return name
