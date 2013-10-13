@@ -24,13 +24,11 @@ debug("hi there2")
 debug2 = pydebug.debug("test2")
 debug2("awesome")
 
-
 debug({"awesome": True}, True, 1, "test")
 debug([], {1,2,3}, {"awesome": True}, True, 1, "test")
 
 time.sleep(0.1)
 debug('should be milliseconds now')
-
 
 time.sleep(1)
 debug('should be seconds now')
@@ -68,10 +66,10 @@ $ DEBUG=* python test_pydebug.py 2>&1 | grep test2
 
   You can also exclude specific debuggers by prefixing them with a "-" character or whitespace.  For example:
 
-  ```
-  $ DEBUG=test2,-test python test_pydebug.py
-  $ DEBUG="test2 -test" python test_pydebug.py
-  ```
+```
+$ DEBUG=test2,-test python test_pydebug.py
+$ DEBUG="test2 -test" python test_pydebug.py
+```
 
 ## License 
 
