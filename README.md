@@ -1,7 +1,4 @@
-pydebug
-=======
-
-# debug
+# pydebug
 
   Tiny python debugging utility modeled after visionmedia's node.js debug module and the python 3 print function
 
