@@ -10,7 +10,7 @@ This module sets up the main interface for all of pydebug
 
 from __future__ import absolute_import
 
-from .lib import *
+from .lib import debug
 
 __title__ = 'pydebug'
 __version__ = '0.0.1'
