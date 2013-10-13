@@ -21,9 +21,7 @@ import time
 # 
 # pydebug.debug(name)
 #
-# once you have initialized the
-# debug module you can call it
-# as shown below
+# once you have initialized the debug module you can call it as shown below
 #
 # debug(*objects, sep=' ', end='\n', file=sys.stderr, flush=False)
 #
