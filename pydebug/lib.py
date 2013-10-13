@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import time
+from functools import wraps
 # import colorama
 
 
@@ -11,6 +12,7 @@ names = []
 skips = []
 sep_regex = "[\s,]+"
 
+print "debug imported"
 debug_names = os.environ.get('DEBUG', '')
 split_names = re.split(sep_regex, debug_names)
 
@@ -47,7 +49,7 @@ def humanize(us):
     return "%sus" % us
 
 
-def noop():
+def noop(*args, **kwargs):
     pass
 
 
@@ -55,34 +57,50 @@ def to_utc_string(input_time):
     return time.strftime("%a, %d %b %Y %T GMT", time.gmtime(input_time))
 
 
+def printable(f):
+    @wraps(f)
+    def printable_decorator(*args, **kwargs):
+        sep = kwargs.get('sep', ' ')
+        end = kwargs.get('end', '\n')
+        file = kwargs.get('file', sys.stderr)
+        flush = kwargs.get('flush', False)
+
+        fmt = sep.join([str(x) for x in args])
+        fmt = f(fmt)
+
+        file.write(fmt+end)
+        if flush:
+            file.flush()
+    return printable_decorator
+
+
 def debug(name):
     should_skip = any(r.match(name) for r in skips)
-
     if should_skip:
         return noop
 
     has_match = any(r.match(name) for r in names)
-
     if not has_match:
         return noop
 
     c = color()
 
+    @printable
     def colored(fmt):
+        """
+        colors the output,
+        mimicks pythons print() function
+        """
         curr = time.time() * 1000000.0  # float microseconds
         us = curr - prev.get(name, curr)
         prev[name] = curr
 
-        fmt = "  \u001b[9{0}m{1} \u001b[3{0}m\u001b[90m" + \
-              "{2}\u001b[3{0}m +{3}\u001b[0m".format(
-                c, name, fmt, humanize(us))
+        return "  \033[9{0}m{1} \033[3{0}m\033[90m{2}\033[3{0}m +{3}\033[0m".format(
+               c, name, fmt, humanize(us))
 
-        sys.stderr.write(fmt)
-
+    @printable
     def plain(fmt):
-        fmt = "{} {} {}".format(to_utc_string(time.time()),
-                                name, fmt)
-
-        sys.stderr.write(fmt)
+        return "{} {} {}".format(to_utc_string(time.time()),
+                                 name, fmt)
 
     return colored if isatty else plain
