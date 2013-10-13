@@ -34,13 +34,17 @@ def color():
     return retval
 
 
-def humanize(microsec):
+def humanize(us):
     ms = 1000
     sec = 1000 * ms
     min = 60 * sec
     hour = 60 * min
 
-    return "%s microseconds" % microsec
+    if us >= hour: return "%sh" % round(us/hour, 1)
+    if us >= min: return "%sm" % round(us/min, 1)
+    if us >= sec: return "%ss" % round(us/sec, 1)
+    if us >= ms: return "%sms" % round(us/ms, 1)
+    return "%sus" % us
 
 
 def noop():
@@ -65,14 +69,13 @@ def debug(name):
     c = color()
 
     def colored(fmt):
-        curr = time.time() * 1000000  # microseconds
+        curr = time.time() * 1000000.0  # float microseconds
         us = curr - prev.get(name, curr)
         prev[name] = curr
 
-        fmt = """
-              \u001b[9{0}m{1} \u001b[3{0}m\u001b[90m
-              {2}\u001b[3{0}m +{3}\u001b[0m
-              """.format(c, name, fmt, humanize(us))
+        fmt = "  \u001b[9{0}m{1} \u001b[3{0}m\u001b[90m" + \
+              "{2}\u001b[3{0}m +{3}\u001b[0m".format(
+                c, name, fmt, humanize(us))
 
         sys.stderr.write(fmt)
 
@@ -83,5 +86,3 @@ def debug(name):
         sys.stderr.write(fmt)
 
     return colored if isatty else plain
-
-    return name
