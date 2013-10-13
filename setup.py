@@ -15,7 +15,7 @@ except (IOError, ImportError):
 
 
 setup(name='pydebug',
-      version='1.0.1',
+      version='1.0.2',
       description="Tiny python debugging utility modeled after visionmedia's node.js debug module",
       long_description=desc,
       author='Malcom Gilbert',
