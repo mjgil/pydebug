@@ -2,7 +2,6 @@ import os
 import re
 import sys
 import time
-from functools import wraps
 
 
 __all__ = ['debug']
@@ -16,7 +15,6 @@ split_names = re.split(sep_regex, debug_names)
 colors = [6, 2, 3, 4, 5, 1]
 prev = {}
 prevColor = 0
-isatty = sys.stdout.isatty()
 
 for name in split_names:
     name = name.replace("*", ".*?")
@@ -54,23 +52,6 @@ def to_utc_string(input_time):
     return time.strftime("%a, %d %b %Y %T GMT", time.gmtime(input_time))
 
 
-def printable(f):
-    @wraps(f)
-    def printable_decorator(*args, **kwargs):
-        sep = kwargs.get('sep', ' ')
-        end = kwargs.get('end', '\n')
-        file = kwargs.get('file', sys.stderr)
-        flush = kwargs.get('flush', False)
-
-        fmt = sep.join([repr(x) for x in args])
-        fmt = f(fmt)
-
-        file.write(fmt+end)
-        if flush:
-            file.flush()
-    return printable_decorator
-
-
 def debug(name):
     should_skip = any(r.match(name) for r in skips)
     if should_skip:
@@ -82,22 +63,36 @@ def debug(name):
 
     c = color()
 
-    @printable
-    def colored(fmt):
+    def time_diff():
+        curr = time.time() * 1000000.0  # float microseconds
+        us = curr - prev.get(name, curr)
+        prev[name] = curr
+        return us
+
+    def colored(fmt, us):
         """
         colors the output,
         mimicks pythons print() function
         """
-        curr = time.time() * 1000000.0  # float microseconds
-        us = curr - prev.get(name, curr)
-        prev[name] = curr
-
         return "  \033[9{0}m{1} \033[3{0}m\033[90m{2}\033[3{0}m +{3}\033[0m".format(
                c, name, fmt, humanize(us))
 
-    @printable
-    def plain(fmt):
-        return "{} {} {}".format(to_utc_string(time.time()),
-                                 name, fmt)
+    def plain(fmt, us):
+        return "{} {} {} +{}".format(to_utc_string(time.time()),
+                                    name, fmt, humanize(us))
 
-    return colored if isatty else plain
+    def printable(*args, **kwargs):
+        sep = kwargs.get('sep', ' ')
+        end = kwargs.get('end', '\n')
+        file = kwargs.get('file', sys.stderr)
+        flush = kwargs.get('flush', False)
+
+        us = time_diff()
+        fmt = sep.join([repr(x) for x in args])
+        fmt = colored(fmt, us) if file.isatty() else plain(fmt, us)
+
+        file.write(fmt+end)
+        if flush:
+            file.flush()
+
+    return printable
