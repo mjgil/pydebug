@@ -1,0 +1,9 @@
+-r base.txt
+
+# test-tools
+coverage
+pytest
+pytest-mock
+mock
+mypy==0.641
+

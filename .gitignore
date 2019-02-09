@@ -26,7 +26,12 @@ pip-log.txt
 # Unit test / coverage reports
 .coverage
 .tox
+.pytest_cache/
+.mypy_cache/
 nosetests.xml
+
+# Virtualenv
+venv/
 
 # Translations
 *.mo
@@ -35,3 +40,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# vscode
+.vscode/
