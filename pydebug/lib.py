@@ -106,6 +106,7 @@ def debug(name):
     function
         function with 'printable' interface to be used for debug logging
     """
+    name = name.replace('.', ':')  # enables the use of __name__
     if not enabled(name):
         return noop
 
