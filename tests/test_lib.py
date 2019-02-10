@@ -46,9 +46,11 @@ def test_debug(capsys):
     nope = lib.debug('test:a:nope')
     assert callable(nope)
     assert nope == lib.noop
+    assert nope.enabled is False
 
     yay = lib.debug('test:c:yay')
     assert callable(yay)
+    assert yay.enabled is True
     yay('should be shown')
     nope('nothing here')
     captured = capsys.readouterr()

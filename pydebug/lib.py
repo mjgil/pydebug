@@ -108,6 +108,7 @@ def debug(name):
     """
     name = name.replace('.', ':')  # enables the use of __name__
     if not enabled(name):
+        noop.enabled = False
         return noop
 
     c = color()
@@ -149,6 +150,7 @@ def debug(name):
         if flush:
             file.flush()
 
+    printable.enabled = True
     return printable
 
 
